@@ -1,0 +1,82 @@
+# This repository contains the necessary functions required to perform RSA encryption and decryption.
+# The RSA cryptosystem is one of the oldest public key encryption schemes and also one of the most widely used encryption schemes.
+# As such, this file serves as a strong reference for anyone interested in the subject and application of encryption schemes.
+# For mathematical proofs of the RSA Cryptosystem, https://en.wikipedia.org/wiki/RSA_(cryptosystem) has great resources.
+
+
+def even_odd(n):
+    s = 0
+    while n % 2 == 0:
+        n, s = n//2, s + 1        
+    return s, n
+
+def miller_rabin(a, p):
+    s, d = even_odd(p-1)
+    x = pow(a,d,p)
+    if x == 1:
+        return True
+    for i in range(s):
+        if x == p-1:
+            return True
+        x = pow(x,2,p)
+    return False
+
+import random
+
+def probable_prime(p):
+    if p % 2 == 0:
+        return False
+    for i in range(40):
+        a = random.randint(2,p-2)
+        if not miller_rabin(a, p):
+            return False
+    return True
+
+def text_into_int(text):
+    n = ""
+    for character in text:
+        n += str(ord(character))
+    return int(n)
+
+def int_into_text(integer):
+    text = ""
+    while integer != 0:
+        text = chr(integer % 100) + text
+        integer //= 100
+    return text
+
+def create_key(k):
+  a = 2**k +1
+  b = 2**k +1
+  einv = 1
+  e = 2**16 +1
+  while not probable_prime(a):
+    a+=2
+  while not probable_prime(b):
+    b+=2
+  while (einv*e)%((a-1)*(b-1)) != 1:
+    einv+=1
+  if a > 2**(k+1) or b > 2**(k+1):
+    return "error"
+  return [a*b, e, einv]
+
+def RSA_encode(text,e,n):
+  a = text_into_int(text)
+  b = pow(a,e,n)
+  return b
+
+def RSA_decode(m,einv,n):
+  a = pow(m,einv,n)
+  b = int_into_text(a)
+  return b
+
+
+# Here is a code snippet you can use to decrypt a message which has been encrypted using the RSA CryptoSystem
+# As your parameters you must pass:
+# 1) Your encrypted message m
+# 2) Your modulus n
+# 3) Your coprime factor e
+
+print(RSA_decode(1746048394106873381014491771226688980487060561412174751301428,
+2422991373920672836260567565047449085726068187499150711052993,
+3053878719809206809300527260869719688705857487781717969331773))
