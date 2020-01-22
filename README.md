@@ -1,5 +1,5 @@
 # PythonRSACryptosystem
-A tech sample of how to implement the RSA cryptosystem for client/server communcations
+A tech sample of how to implement the RSA cryptosystem for client/server communications
 ---------------------------------------------------------------------------------------------------
  This repository contains the necessary functions required to perform RSA encryption and decryption.
  The RSA cryptosystem is one of the oldest public key encryption schemes and also one of the most widely used encryption schemes.
